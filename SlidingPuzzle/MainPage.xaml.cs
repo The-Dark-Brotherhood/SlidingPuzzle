@@ -20,9 +20,6 @@ namespace SlidingPuzzle
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private TransformGroup transforms;
-        private MatrixTransform previousTransform;
-        private CompositeTransform deltaTransform;
         List<Image> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
 
@@ -48,20 +45,6 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg13);
             AllGridPanels.Add(cropImg14);
             AllGridPanels.Add(cropImg15);
-
-            InitManipulationTransforms();
-            cropImg0.ManipulationDelta += new ManipulationDeltaEventHandler(ManipulateMe_ManipulationDelta);
-            cropImg0.ManipulationMode = ManipulationModes.TranslateY | ManipulationModes.TranslateX;
-
-            InitManipulationTransforms1();
-            cropImg1.ManipulationDelta += new ManipulationDeltaEventHandler(ManipulateMe_ManipulationDelta1);
-            cropImg1.ManipulationMode = ManipulationModes.TranslateY | ManipulationModes.TranslateX;
-
-            InitManipulationTransforms2();
-            cropImg2.ManipulationDelta += new ManipulationDeltaEventHandler(ManipulateMe_ManipulationDelta2);
-            cropImg2.ManipulationMode = ManipulationModes.TranslateY | ManipulationModes.TranslateX;
-
-
 
         }
 
@@ -125,84 +108,6 @@ namespace SlidingPuzzle
                 randomPos.RemoveAt(number);
             }*/
             }
-
-        /// MOVING -------------------------------------//
-        private void InitManipulationTransforms()
-        {
-            transforms = new TransformGroup();
-            previousTransform = new MatrixTransform() { Matrix = Matrix.Identity };
-            deltaTransform = new CompositeTransform();
-
-            transforms.Children.Add(previousTransform);
-            transforms.Children.Add(deltaTransform);
-
-            // Set the render transform on the rect
-            //foreach (Image croppedImg in AllGridPanels)
-         
-            cropImg0.RenderTransform = transforms;
-            
-        }
-
-        private void InitManipulationTransforms1()
-        {
-            transforms = new TransformGroup();
-            previousTransform = new MatrixTransform() { Matrix = Matrix.Identity };
-            deltaTransform = new CompositeTransform();
-
-            transforms.Children.Add(previousTransform);
-            transforms.Children.Add(deltaTransform);
-
-            // Set the render transform on the rect
-            //foreach (Image croppedImg in AllGridPanels)
-
-            cropImg1.RenderTransform = transforms;
-
-        }
-
-        private void InitManipulationTransforms2()
-        {
-            transforms = new TransformGroup();
-            previousTransform = new MatrixTransform() { Matrix = Matrix.Identity };
-            deltaTransform = new CompositeTransform();
-
-            transforms.Children.Add(previousTransform);
-            transforms.Children.Add(deltaTransform);
-
-            // Set the render transform on the rect
-            //foreach (Image croppedImg in AllGridPanels)
-
-            cropImg2.RenderTransform = transforms;
-
-        }
-
-
-
-        // Process the change resulting from a manipulation
-        void ManipulateMe_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            previousTransform.Matrix = transforms.Value;
-            // Look at the Delta property of the ManipulationDeltaRoutedEventArgs to retrieve
-            // the rotation, scale, X, and Y changes
-            deltaTransform.TranslateX = e.Delta.Translation.X;
-            deltaTransform.TranslateY = e.Delta.Translation.Y;
-        }
-        void ManipulateMe_ManipulationDelta1(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            previousTransform.Matrix = transforms.Value;
-            // Look at the Delta property of the ManipulationDeltaRoutedEventArgs to retrieve
-            // the rotation, scale, X, and Y changes
-            deltaTransform.TranslateX = e.Delta.Translation.X;
-            deltaTransform.TranslateY = e.Delta.Translation.Y;
-        }
-        void ManipulateMe_ManipulationDelta2(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            previousTransform.Matrix = transforms.Value;
-            // Look at the Delta property of the ManipulationDeltaRoutedEventArgs to retrieve
-            // the rotation, scale, X, and Y changes
-            deltaTransform.TranslateX = e.Delta.Translation.X;
-            deltaTransform.TranslateY = e.Delta.Translation.Y;
-        }
-
 
         //-------------------------CROPPING--------------------------//
         private async Task CropImagesAsync(SoftwareBitmap softwareBitmap)
