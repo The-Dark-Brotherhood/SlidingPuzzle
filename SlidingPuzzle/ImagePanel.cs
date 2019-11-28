@@ -21,7 +21,7 @@ namespace SlidingPuzzle
     {
         public Image imageInthePanel = null;
         public int ShouldBeInIndex = -1;
-
+        //yoyo
  
         
         public ImagePanel(SoftwareBitmapSource source, int shouldBe)

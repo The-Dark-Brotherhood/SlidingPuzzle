@@ -188,7 +188,7 @@ namespace SlidingPuzzle
                 (int)blankSpace.GetValue(Grid.RowProperty),
                 (int)blankSpace.GetValue(Grid.ColumnProperty)
             );
-
+    
 
             // Neighbors positions 
             if (BlankIsNeighbor(imageLocation, blankLocation))
