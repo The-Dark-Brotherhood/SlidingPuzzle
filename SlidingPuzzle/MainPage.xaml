@@ -15,6 +15,7 @@
 
       <TextBlock Name="ImgWidth" FontSize="50" HorizontalAlignment="Left" Margin="553,53,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Height="86" Width="225"/>
 
+
         <Grid x:Name="ChoppedImage" Margin="120,250,450,100">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -82,7 +83,7 @@
                         </RowDefinition>
                     </Grid.RowDefinitions>
                     <Rectangle Fill="Black" Visibility="Visible" Stretch="UniformToFill" Grid.RowSpan="2" Grid.Row="0"></Rectangle>
-                    <Image x:Name="cropImg15" Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
+                    <Image Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
                 </Grid>
             </Button>
         </Grid>
