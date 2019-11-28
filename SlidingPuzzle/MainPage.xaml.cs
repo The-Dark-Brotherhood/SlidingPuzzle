@@ -11,6 +11,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Media.Capture;
+using Windows.Foundation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -23,7 +25,7 @@ namespace SlidingPuzzle
     {
         List<Image> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
-        //Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
+        //public Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
 
         public MainPage()
         {
@@ -45,7 +47,9 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg11);
             AllGridPanels.Add(cropImg12);
             AllGridPanels.Add(cropImg13);
-
+            AllGridPanels.Add(cropImg14);
+            AllGridPanels.Add(cropImg15);
+            //AllGridPanels = ShuffleList(AllGridPanels);
         }
 
 
@@ -107,7 +111,7 @@ namespace SlidingPuzzle
 
                 randomPos.RemoveAt(number);
             }*/
-            }
+        }
 
         //-------------------------CROPPING--------------------------//
         private async Task CropImagesAsync(SoftwareBitmap softwareBitmap)
@@ -166,13 +170,13 @@ namespace SlidingPuzzle
                     AllGridPanels[counter].Source = source;
                 }
             }
+
         }
 
         private void notBlank_Click(object sender, RoutedEventArgs e)
         {
             Button image = (Button)sender;
-            Button blankSpace = blank;              // Programmaticaly do this ????
-
+            Button blankSpace = this.blankButton;
             Tuple<int, int> imageLocation = new Tuple<int, int>
             (
                 (int)image.GetValue(Grid.RowProperty),
@@ -184,6 +188,7 @@ namespace SlidingPuzzle
                 (int)blankSpace.GetValue(Grid.RowProperty),
                 (int)blankSpace.GetValue(Grid.ColumnProperty)
             );
+
 
             // Neighbors positions 
             if (BlankIsNeighbor(imageLocation, blankLocation))
@@ -201,7 +206,7 @@ namespace SlidingPuzzle
             }
         }
 
-        private bool BlankIsNeighbor(Tuple<int,int> imageLocation, Tuple<int, int> blankLocation)
+        private bool BlankIsNeighbor(Tuple<int, int> imageLocation, Tuple<int, int> blankLocation)
         {
             bool isNeighbor = false;
 
@@ -216,6 +221,49 @@ namespace SlidingPuzzle
             return isNeighbor;
         }
 
+        private static Random rng = new Random();
 
+        //http://www.vcskicks.com/randomize_array.php
+        private List<E> ShuffleList<E>(List<E> inputList)
+        {
+            List<E> randomList = new List<E>();
+
+            Random r = new Random();
+            int randomIndex = 0;
+            while (inputList.Count > 0)
+            {
+                randomIndex = r.Next(0, inputList.Count); //Choose a random object in the list
+                randomList.Add(inputList[randomIndex]); //add it to the new, random list
+                inputList.RemoveAt(randomIndex); //remove to avoid duplicates
+            }
+
+            return randomList; //return the new random list
+        }
+        private async void Use_Photo(object sender, RoutedEventArgs e)
+        {
+            CameraCaptureUI captureUI = new CameraCaptureUI();
+            captureUI.PhotoSettings.Format = CameraCaptureUIPhotoFormat.Png;
+            captureUI.PhotoSettings.CroppedSizeInPixels = new Size(400, 400);
+
+            StorageFile photo = await captureUI.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (photo == null)
+            {
+                // User cancelled photo capture
+                return;
+            }
+            IRandomAccessStream stream = await photo.OpenAsync(FileAccessMode.Read);
+            BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
+            SoftwareBitmap softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+
+            SoftwareBitmap softwareBitmapBGR8 = SoftwareBitmap.Convert(softwareBitmap,
+            BitmapPixelFormat.Bgra8,
+            BitmapAlphaMode.Premultiplied);
+
+            SoftwareBitmapSource bitmapSource = new SoftwareBitmapSource();
+            await bitmapSource.SetBitmapAsync(softwareBitmapBGR8);
+
+            await CropImagesAsync(softwareBitmap);
+        }
     }
 }
