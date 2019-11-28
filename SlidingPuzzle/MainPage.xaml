@@ -26,22 +26,63 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="cropImg0" Stretch="Fill"   Grid.Column="0" Grid.Row="0"/>
-            <Image x:Name="cropImg1"  Stretch="Fill" Grid.Column="1" Grid.Row="0"/>
-            <Image x:Name="cropImg2"  Stretch="Fill"      Grid.Column="2" Grid.Row="0"/>
-            <Image x:Name="cropImg3"   Stretch="Fill"    Grid.Column="3" Grid.Row="0"/>
-            <Image x:Name="cropImg4"   Stretch="Fill"    Grid.Column="0" Grid.Row="1"/>
-            <Image x:Name="cropImg5"  Stretch="Fill"  Grid.Column="1" Grid.Row="1"/>
-            <Image x:Name="cropImg6"  Stretch="Fill" Grid.Column="2" Grid.Row="1"/>
-            <Image x:Name="cropImg7"  Stretch="Fill" Grid.Column="3" Grid.Row="1"/>
-            <Image x:Name="cropImg8"   Stretch="Fill"  Grid.Column="0" Grid.Row="2"/>
-            <Image x:Name="cropImg9"   Stretch="Fill"   Grid.Column="1" Grid.Row="2"/>
-            <Image x:Name="cropImg10"   Stretch="Fill"  Grid.Column="2" Grid.Row="2"/>
-            <Image x:Name="cropImg11"  Stretch="Fill"  Grid.Column="3" Grid.Row="2"/>
-            <Image x:Name="cropImg12"   Stretch="Fill" Grid.Column="0" Grid.Row="3"/>
-            <Image x:Name="cropImg13"   Stretch="Fill"    Grid.Column="1" Grid.Row="3"/>
-            <Image x:Name="cropImg14"  Stretch="Fill" Grid.Column="2" Grid.Row="3"/>
-            <Image x:Name="cropImg15"  Stretch="Fill"  Grid.Column="3" Grid.Row="3"/>
+            <Button Grid.Column="0" Grid.Row="0" Padding="1">
+            <Image x:Name="cropImg0" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="1" Grid.Row="0" Padding="1">
+            <Image x:Name="cropImg1" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="2" Grid.Row="0" Padding="1">
+            <Image x:Name="cropImg2" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="3" Grid.Row="0" Padding="1">
+            <Image x:Name="cropImg3" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="0" Grid.Row="1" Padding="1">
+            <Image x:Name="cropImg4" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="1" Grid.Row="1" Padding="1">
+            <Image x:Name="cropImg5" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="2" Grid.Row="1" Padding="1">
+            <Image x:Name="cropImg6" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="3" Grid.Row="1" Padding="1">
+            <Image x:Name="cropImg7" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="0" Grid.Row="2" Padding="1">
+            <Image x:Name="cropImg8" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="1" Grid.Row="2" Padding="1">
+            <Image x:Name="cropImg9" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="2" Grid.Row="2" Padding="1">
+            <Image x:Name="cropImg10" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="3" Grid.Row="2" Padding="1">
+            <Image x:Name="cropImg11" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="0" Grid.Row="3" Padding="1">
+            <Image x:Name="cropImg12" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="1" Grid.Row="3" Padding="1">
+            <Image x:Name="cropImg13" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="2" Grid.Row="3" Padding="1">
+            <Image x:Name="cropImg14" Stretch="Fill"/>
+          </Button>
+            <Button Grid.Column="3" Grid.Row="3" Padding="1" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition>
+                        </RowDefinition>
+                        <RowDefinition>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="Black" Visibility="Visible" Stretch="UniformToFill" Grid.RowSpan="2" Grid.Row="0"></Rectangle>
+                    <Image x:Name="cropImg15" Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
+                </Grid>
+            </Button>
         </Grid>
     </Grid>
 </Page>

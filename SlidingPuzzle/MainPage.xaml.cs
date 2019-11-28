@@ -123,7 +123,7 @@ namespace SlidingPuzzle
             uint eachGridHeight = imgHeight / grid;
             uint eachGridWidth = imgWidth / grid;
 
-            for (int counter = 0; counter < (AllGridPanels.Count - 1); counter++)
+            for (int counter = 0; counter < (AllGridPanels.Count); counter++)
             {
                 SoftwareBitmap croppedBitmap;
                 using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
