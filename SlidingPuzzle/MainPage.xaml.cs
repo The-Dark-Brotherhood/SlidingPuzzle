@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using System.Collections.Generic;
-using System.Linq;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -23,7 +22,7 @@ namespace SlidingPuzzle
     {
         List<Image> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
-        //Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
+        Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
 
         public MainPage()
         {
@@ -171,51 +170,32 @@ namespace SlidingPuzzle
         private void notBlank_Click(object sender, RoutedEventArgs e)
         {
             Button image = (Button)sender;
-            Button blankSpace = blank;              // Programmaticaly do this ????
-
             Tuple<int, int> imageLocation = new Tuple<int, int>
             (
                 (int)image.GetValue(Grid.RowProperty),
                 (int)image.GetValue(Grid.ColumnProperty)
             );
 
-            Tuple<int, int> blankLocation = new Tuple<int, int>
-            (
-                (int)blankSpace.GetValue(Grid.RowProperty),
-                (int)blankSpace.GetValue(Grid.ColumnProperty)
-            );
-
             // Neighbors positions 
-            if (BlankIsNeighbor(imageLocation, blankLocation))
+            if (imageLocation.Item1 == BlankLocation.Item1 && (imageLocation.Item2 + 1) == BlankLocation.Item2)           // South
             {
-                // Swap
-                image.SetValue(Grid.RowProperty, blankLocation.Item1);
-                image.SetValue(Grid.ColumnProperty, blankLocation.Item2);
 
-                blankSpace.SetValue(Grid.RowProperty, imageLocation.Item1);
-                blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
+            }
+            else if (imageLocation.Item1 == BlankLocation.Item1 && (imageLocation.Item2 - 1) == BlankLocation.Item2)      // North
+            {
+            }
+            else if (imageLocation.Item2 == BlankLocation.Item2 && (imageLocation.Item1 + 1) == BlankLocation.Item1)      // East
+            {
+                
+            }
+            else if (imageLocation.Item2 == BlankLocation.Item2 && (imageLocation.Item1 - 1) == BlankLocation.Item1)      // West
+            {
+
             }
             else
             {
                 // Dont move
             }
         }
-
-        private bool BlankIsNeighbor(Tuple<int,int> imageLocation, Tuple<int, int> blankLocation)
-        {
-            bool isNeighbor = false;
-
-            if ((imageLocation.Item1 == blankLocation.Item1 && (imageLocation.Item2 + 1) == blankLocation.Item2) ||
-                (imageLocation.Item1 == blankLocation.Item1 && (imageLocation.Item2 - 1) == blankLocation.Item2) ||
-                (imageLocation.Item2 == blankLocation.Item2 && (imageLocation.Item1 + 1) == blankLocation.Item1) ||
-                (imageLocation.Item2 == blankLocation.Item2 && (imageLocation.Item1 - 1) == blankLocation.Item1))
-            {
-                isNeighbor = true;
-            }
-
-            return isNeighbor;
-        }
-
-
     }
 }
