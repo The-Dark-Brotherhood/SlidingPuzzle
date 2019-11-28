@@ -22,6 +22,7 @@ namespace SlidingPuzzle
     {
         List<Image> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
+        Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
 
         public MainPage()
         {
@@ -43,8 +44,6 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg11);
             AllGridPanels.Add(cropImg12);
             AllGridPanels.Add(cropImg13);
-            AllGridPanels.Add(cropImg14);
-            AllGridPanels.Add(cropImg15);
 
         }
 
@@ -165,6 +164,37 @@ namespace SlidingPuzzle
 
                     AllGridPanels[counter].Source = source;
                 }
+            }
+        }
+
+        private void notBlank_Click(object sender, RoutedEventArgs e)
+        {
+            Button image = (Button)sender;
+            Tuple<int, int> imageLocation = new Tuple<int, int>
+            (
+                (int)image.GetValue(Grid.RowProperty),
+                (int)image.GetValue(Grid.ColumnProperty)
+            );
+
+            // Neighbors positions 
+            if (imageLocation.Item1 == BlankLocation.Item1 && (imageLocation.Item2 + 1) == BlankLocation.Item2)           // South
+            {
+
+            }
+            else if (imageLocation.Item1 == BlankLocation.Item1 && (imageLocation.Item2 - 1) == BlankLocation.Item2)      // North
+            {
+            }
+            else if (imageLocation.Item2 == BlankLocation.Item2 && (imageLocation.Item1 + 1) == BlankLocation.Item1)      // East
+            {
+                
+            }
+            else if (imageLocation.Item2 == BlankLocation.Item2 && (imageLocation.Item1 - 1) == BlankLocation.Item1)      // West
+            {
+
+            }
+            else
+            {
+                // Dont move
             }
         }
     }

@@ -40,8 +40,8 @@
             <Image x:Name="cropImg11"  Stretch="Fill"  Grid.Column="3" Grid.Row="2"/>
             <Image x:Name="cropImg12"   Stretch="Fill" Grid.Column="0" Grid.Row="3"/>
             <Image x:Name="cropImg13"   Stretch="Fill"    Grid.Column="1" Grid.Row="3"/>
-            <Image x:Name="cropImg14"  Stretch="Fill" Grid.Column="2" Grid.Row="3"/>
-            <Image x:Name="cropImg15"  Stretch="Fill"  Grid.Column="3" Grid.Row="3"/>
+            <Button x:Name="notBlank"  Background="Red" Grid.Column="2" Grid.Row="3" Height="197" Width="232" HorizontalAlignment="Center" Click="notBlank_Click"/>
+            <Button x:Name="blank" Background="AntiqueWhite" Grid.Column="3" Grid.Row="3" Height="197" Width="232" HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Page>
