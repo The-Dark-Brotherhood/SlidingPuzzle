@@ -8,10 +8,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignHeight="1132">
 
-    <Grid>
-        <Image Name="CroppedImg"  HorizontalAlignment="Left"  Height="158" Margin="1196,251,0,0" VerticalAlignment="Top" Width="189"/>
-        <Button Content="Button" Margin="138,53,0,0" VerticalAlignment="Top" Height="79" Width="340" Click="Button_Click" />
-        <TextBlock Name="ImgWidth" FontSize="50" HorizontalAlignment="Left" Margin="553,53,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Height="86" Width="225"/>
+    <Grid Background="#00AEE0">
+        <StackPanel BorderThickness="5" BorderBrush="Black" Background="#04294F" Margin="0,0,0,950"/>
+            <Image Name="CroppedImg"  HorizontalAlignment="Left"  Height="158" Margin="1196,251,0,0" VerticalAlignment="Top" Width="189"/>
+        <Button Foreground="White"  Background="#FFB400" Content="Button" Margin="120,46,0,0" VerticalAlignment="Top" Height="79" Width="184" Click="Button_Click" />
+        <StackPanel/>
 
         <Grid x:Name="ChoppedImage" Margin="120,250,450,100">
             <Grid.RowDefinitions>
@@ -26,52 +27,53 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" Padding="1">
-            <Image x:Name="cropImg0" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="0" Padding="1">
-            <Image x:Name="cropImg1" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="0" Padding="1">
-            <Image x:Name="cropImg2" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="0" Padding="1">
-            <Image x:Name="cropImg3" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="1" Padding="1">
-            <Image x:Name="cropImg4" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="1" Padding="1">
-            <Image x:Name="cropImg5" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="1" Padding="1">
-            <Image x:Name="cropImg6" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="1" Padding="1">
-            <Image x:Name="cropImg7" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="2" Padding="1">
-            <Image x:Name="cropImg8" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="2" Padding="1">
-            <Image x:Name="cropImg9" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="2" Padding="1">
-            <Image x:Name="cropImg10" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="2" Padding="1">
-            <Image x:Name="cropImg11" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="3" Padding="1">
-            <Image x:Name="cropImg12" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="3" Padding="1">
-            <Image x:Name="cropImg13" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="3" Padding="1">
-            <Image x:Name="cropImg14" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="3" Padding="1" >
+
+            <Button x:Name="cropImg0" Grid.Row="0" Padding="1" Click="notBlank_Click" Height="196" Width="233" HorizontalAlignment="Center">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button  x:Name="cropImg1" Grid.Column="1" Grid.Row="0" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg2" Grid.Column="2" Grid.Row="0" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg3" Grid.Column="3" Grid.Row="0" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg4" Grid.Column="0" Grid.Row="1" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg5" Grid.Column="1" Grid.Row="1" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg6" Grid.Column="2" Grid.Row="1" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg7" Grid.Column="3" Grid.Row="1" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg8" Grid.Row="2" Padding="1" Click="notBlank_Click" Height="57" Width="139" HorizontalAlignment="Center">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg9" Grid.Column="1" Grid.Row="2" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg10" Grid.Column="2" Grid.Row="2" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg11" Grid.Column="3" Grid.Row="2" Padding="1" Click="notBlank_Click">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg12" Grid.Row="3" Padding="1" Click="notBlank_Click" Width="212" HorizontalAlignment="Center" Margin="0,7,0,0" VerticalAlignment="Top" Height="178">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg13" Grid.Column="1" Grid.Row="3" Padding="1" Click="notBlank_Click" Height="103" Width="131" HorizontalAlignment="Center">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg14" Grid.Column="2" Grid.Row="3" Padding="1" Click="notBlank_Click" Height="195" Width="232" HorizontalAlignment="Center">
+                <Image  Stretch="Fill"/>
+            </Button>
+            <Button x:Name="cropImg15" Grid.Column="3" Grid.Row="3" Padding="1" Click="notBlank_Click">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition>
@@ -80,7 +82,7 @@
                         </RowDefinition>
                     </Grid.RowDefinitions>
                     <Rectangle Fill="Black" Visibility="Visible" Stretch="UniformToFill" Grid.RowSpan="2" Grid.Row="0"></Rectangle>
-                    <Image x:Name="cropImg15" Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
+                    <Image Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
                 </Grid>
             </Button>
         </Grid>
