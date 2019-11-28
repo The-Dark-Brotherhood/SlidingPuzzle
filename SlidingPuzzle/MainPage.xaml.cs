@@ -14,6 +14,7 @@ using System.Linq;
 using Windows.Media.Capture;
 using Windows.Foundation;
 
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace SlidingPuzzle
@@ -23,16 +24,15 @@ namespace SlidingPuzzle
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<Image> AllGridPanels = null;
+        List<Button> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
-        //public Tuple<int, int> BlankLocation = new Tuple<int, int>(3,3);
 
         public MainPage()
         {
             this.InitializeComponent();
             ImagePosition = new List<ImagePanel>();
 
-            AllGridPanels = new List<Image>();
+            AllGridPanels = new List<Button>();
             AllGridPanels.Add(cropImg0);
             AllGridPanels.Add(cropImg1);
             AllGridPanels.Add(cropImg2);
@@ -79,7 +79,7 @@ namespace SlidingPuzzle
                 // Get the SoftwareBitmap representation of the file
                 softwareBitmap = await decoder.GetSoftwareBitmapAsync();
             }
-            await CropImagesAsync(softwareBitmap);
+            //await CropImagesAsync(softwareBitmap);
 
             /*
             List<Tuple<int, int>> randomPos = new List<Tuple<int, int>>
@@ -167,7 +167,7 @@ namespace SlidingPuzzle
                     SoftwareBitmapSource source = new SoftwareBitmapSource();
                     await source.SetBitmapAsync(croppedBitmap);
 
-                    AllGridPanels[counter].Source = source;
+                    //AllGridPanels[counter].Background = source;
                 }
             }
 
@@ -177,6 +177,7 @@ namespace SlidingPuzzle
         {
             Button image = (Button)sender;
             Button blankSpace = this.blankButton;
+
             Tuple<int, int> imageLocation = new Tuple<int, int>
             (
                 (int)image.GetValue(Grid.RowProperty),
@@ -220,7 +221,6 @@ namespace SlidingPuzzle
 
             return isNeighbor;
         }
-
         private static Random rng = new Random();
 
         //http://www.vcskicks.com/randomize_array.php
@@ -265,5 +265,7 @@ namespace SlidingPuzzle
 
             await CropImagesAsync(softwareBitmap);
         }
+
     }
+
 }
