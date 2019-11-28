@@ -24,7 +24,7 @@ namespace SlidingPuzzle
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<Button> AllGridPanels = null;
+        List<Image> AllGridPanels = null;
         List<ImagePanel> ImagePosition = null;
 
         public MainPage()
@@ -32,7 +32,7 @@ namespace SlidingPuzzle
             this.InitializeComponent();
             ImagePosition = new List<ImagePanel>();
 
-            AllGridPanels = new List<Button>();
+            AllGridPanels = new List<Image>();
             AllGridPanels.Add(cropImg0);
             AllGridPanels.Add(cropImg1);
             AllGridPanels.Add(cropImg2);
@@ -79,7 +79,7 @@ namespace SlidingPuzzle
                 // Get the SoftwareBitmap representation of the file
                 softwareBitmap = await decoder.GetSoftwareBitmapAsync();
             }
-            //await CropImagesAsync(softwareBitmap);
+            await CropImagesAsync(softwareBitmap);
 
             /*
             List<Tuple<int, int>> randomPos = new List<Tuple<int, int>>
@@ -167,7 +167,7 @@ namespace SlidingPuzzle
                     SoftwareBitmapSource source = new SoftwareBitmapSource();
                     await source.SetBitmapAsync(croppedBitmap);
 
-                    //AllGridPanels[counter].Background = source;
+                    AllGridPanels[counter].Source = source;
                 }
             }
 
