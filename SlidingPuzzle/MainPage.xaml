@@ -9,12 +9,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignHeight="1132">
 
     <Grid>
-        <Image Name="CroppedImg"  HorizontalAlignment="Left"  Height="158" Margin="1196,251,0,0" VerticalAlignment="Top" Width="189"/>
+        <Image Name="OriginalImage"  HorizontalAlignment="Left"  Height="231" Margin="1157,250,0,0" VerticalAlignment="Top" Width="259"/>
         <Button Content="Load Image" Margin="138,53,0,0" VerticalAlignment="Top" Height="79" Width="340" Click="Button_Click" />
-       <Button Content="Take Picture" Margin="138,53,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="79" Width="340" Click="Use_Photo" />
-
-      <TextBlock Name="ImgWidth" FontSize="50" HorizontalAlignment="Left" Margin="553,53,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top" Height="86" Width="225"/>
-
+        <Button Content="Take Picture" Margin="0,53,450,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="79" Width="300" Click="Use_Photo" />
 
         <Grid x:Name="ChoppedImage" Margin="120,250,450,100">
             <Grid.RowDefinitions>
@@ -29,51 +26,21 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg0" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="0" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg1" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="0" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg2" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="0" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg3" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="1" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg4" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="1" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg5" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="1" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg6" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="1" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg7" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="2" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg8" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="2" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg9" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="2" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg10" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="3" Grid.Row="2" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg11" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="0" Grid.Row="3" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg12" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="1" Grid.Row="3" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg13" Stretch="Fill"/>
-          </Button>
-            <Button Grid.Column="2" Grid.Row="3" Padding="1" Click="notBlank_Click">
-            <Image x:Name="cropImg14" Stretch="Fill"/>
-          </Button>
+            <Button x:Name="cropImg0" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg1"  Grid.Column="1" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg2"  Grid.Column="2" Grid.Row="0" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Button x:Name="cropImg3"  Grid.Column="3" Grid.Row="0" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg4"  Grid.Column="0" Grid.Row="1" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg5"  Grid.Column="1" Grid.Row="1" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg6"  Grid.Column="2" Grid.Row="1" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg7"  Grid.Column="3" Grid.Row="1" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg8"  Grid.Column="0" Grid.Row="2" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg9"  Grid.Column="1" Grid.Row="2" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg10" Grid.Column="2" Grid.Row="2" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg11" Grid.Column="3" Grid.Row="2" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg12" Grid.Column="0" Grid.Row="3" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg13" Grid.Column="1" Grid.Row="3" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="cropImg14" Grid.Column="2" Grid.Row="3" Padding="1" Click="notBlank_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Button x:Name="blankButton" Grid.Column="3" Grid.Row="3" Padding="1" >
                 <Grid>
                     <Grid.RowDefinitions>
