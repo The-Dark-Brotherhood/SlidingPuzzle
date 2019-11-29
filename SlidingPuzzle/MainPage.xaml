@@ -5,15 +5,46 @@
     xmlns:local="using:SlidingPuzzle"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DesignHeight="1132">
+    mc:Ignorable="d">
 
-    <Grid>
-        <Image Name="OriginalImage"  HorizontalAlignment="Left"  Height="231" Margin="1157,250,0,0" VerticalAlignment="Top" Width="259"/>
-        <Button Content="Load Image" Margin="138,53,0,0" VerticalAlignment="Top" Height="79" Width="340" Click="Button_Click" />
-        <Button Content="Take Picture" Margin="0,53,450,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="79" Width="300" Click="Use_Photo" />
 
-        <Grid x:Name="ChoppedImage" Margin="120,250,450,100">
+    <Grid Background="#FFDEDEDE">
+        <Grid x:Name="GridMain" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="540" Width="1010">
+            <Grid x:Name="Game" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="700">
+            </Grid>
+        </Grid>
+        <Grid Height="60" VerticalAlignment="Top" Background="#107C10">
+            
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Assignment 7:UWP</TextBlock>
+        </Grid>
+        <Grid x:Name="GridMenu" Width="50" HorizontalAlignment="Right" Background="#3A3A3A">
+
+            <StackPanel>
+                <Image Height="80" VerticalAlignment="Bottom"/>
+                <ListView x:Name="ListViewMenu" Foreground="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
+                    <ListViewItem x:Name="OpenFile" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="NewFolder" />
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="Camera" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Camera"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="ShufflePics" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Refresh"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Visibility="Collapsed" x:Name="gameContainer">
+          <Image Name="OriginalImage"  HorizontalAlignment="Left"  Height="231" Margin="1157,250,0,0" VerticalAlignment="Top" Width="259"/>
+
+            <Grid x:Name="ChoppedImage" Margin="120,250,450,100" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -49,10 +80,10 @@
                         <RowDefinition>
                         </RowDefinition>
                     </Grid.RowDefinitions>
-                    <Rectangle Fill="Black" Visibility="Visible" Stretch="UniformToFill" Grid.RowSpan="2" Grid.Row="0"></Rectangle>
                     <Image x:Name="cropImg15" Stretch="Fill" Visibility="Collapsed" Grid.RowSpan="2" Grid.Row="0"/>
                 </Grid>
             </Button>
         </Grid>
+    </StackPanel>
     </Grid>
 </Page>

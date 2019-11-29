@@ -15,6 +15,8 @@ using Windows.Media.Capture;
 using Windows.Foundation;
 
 
+
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace SlidingPuzzle
@@ -48,7 +50,6 @@ namespace SlidingPuzzle
         public MainPage()
         {
             this.InitializeComponent();
-
             AllGridPanels = new List<Button>();
             AllGridPanels.Add(cropImg0);
             AllGridPanels.Add(cropImg1);
@@ -201,6 +202,9 @@ namespace SlidingPuzzle
                 }
             }
 
+            gameContainer.Visibility = Visibility.Visible;
+
+
         }
 
         private void notBlank_Click(object sender, RoutedEventArgs e)
@@ -316,6 +320,56 @@ namespace SlidingPuzzle
             await bitmapSource.SetBitmapAsync(softwareBitmapBGR8);
 
             await CropImagesAsync(softwareBitmap);
+        }
+
+        public static void Shuffle(ref Image[,] img)
+        {
+            // Get the dimensions.
+            int num_rows = img.GetUpperBound(0) + 1;
+            int num_cols = img.GetUpperBound(1) + 1;
+            int num_cells = num_rows * num_cols;
+            Image temp = new Image();
+            // Randomize the array.
+            Random rand = new Random();
+            for (int i = 0; i < num_cells - 1; i++)
+            {
+                // Pick a random cell between i and the end of the array.
+                int j = rand.Next(i, num_cells);
+
+                // Convert to row/column indexes.
+                int row_i = i / num_cols;
+                int col_i = i % num_cols;
+                int row_j = j / num_cols;
+                int col_j = j % num_cols;
+
+                // Swap cells i and j.
+                temp.Source = img[row_i, col_i].Source;
+                img[row_i, col_i].Source = img[row_j, col_j].Source;
+                img[row_j, col_j].Source = temp.Source;
+            }
+        }
+        //private void Button_Click_Shuffle(object sender, RoutedEventArgs e)
+        //{
+        //    Shuffle(ref images);
+        //}
+        private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GridMain.Children.Clear();
+
+            switch (((ListViewItem)((ListView)sender).SelectedItem).Name)
+            {
+                case "OpenFile":
+                    Button_Click(sender, e);
+                    break;
+                case "Camera":
+                    Use_Photo(sender, e);
+                    break;
+                case "Shuffle":
+
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
