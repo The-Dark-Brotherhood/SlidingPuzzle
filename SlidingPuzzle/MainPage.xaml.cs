@@ -26,16 +26,31 @@ namespace SlidingPuzzle
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<Image> AllGridPanels = null;
-        List<ImagePanel> ImagePosition = null;
+        List<Button> AllGridPanels = null;
+        List<Tuple<int, int>> winPosition = new List<Tuple<int, int>>()      
+        {
+            Tuple.Create(0, 0),
+            Tuple.Create(0, 1),
+            Tuple.Create(0, 2),
+            Tuple.Create(0, 3),
+            Tuple.Create(1, 0),
+            Tuple.Create(1, 1),
+            Tuple.Create(1, 2),
+            Tuple.Create(1, 3),
+            Tuple.Create(2, 0),
+            Tuple.Create(2, 1),
+            Tuple.Create(2, 2),
+            Tuple.Create(2, 3),
+            Tuple.Create(3, 0),
+            Tuple.Create(3, 1),
+            Tuple.Create(3, 2),
+            Tuple.Create(3, 3)
+        };
 
         public MainPage()
         {
             this.InitializeComponent();
-
-            ImagePosition = new List<ImagePanel>();
-
-            AllGridPanels = new List<Image>();
+            AllGridPanels = new List<Button>();
             AllGridPanels.Add(cropImg0);
             AllGridPanels.Add(cropImg1);
             AllGridPanels.Add(cropImg2);
@@ -51,14 +66,13 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg12);
             AllGridPanels.Add(cropImg13);
             AllGridPanels.Add(cropImg14);
-            AllGridPanels.Add(cropImg15);
-            //AllGridPanels = ShuffleList(AllGridPanels);
+            AllGridPanels.Add(blankButton);
         }
 
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-
+                
             // Reference: https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/imaging
             // Select image
             FileOpenPicker fileOpenPicker = new FileOpenPicker();
@@ -71,7 +85,7 @@ namespace SlidingPuzzle
             {
                 // The user cancelled the picking operation
                 return;
-            }
+            }   
 
             SoftwareBitmap softwareBitmap;
             using (IRandomAccessStream stream = await inputFile.OpenAsync(FileAccessMode.Read))
@@ -82,6 +96,14 @@ namespace SlidingPuzzle
                 // Get the SoftwareBitmap representation of the file
                 softwareBitmap = await decoder.GetSoftwareBitmapAsync();
             }
+
+
+            softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+
+            SoftwareBitmapSource originalSource = new SoftwareBitmapSource();
+            await originalSource.SetBitmapAsync(softwareBitmap);
+
+            OriginalImage.Source = originalSource;
             await CropImagesAsync(softwareBitmap);
 
             /*
@@ -114,7 +136,10 @@ namespace SlidingPuzzle
 
                 randomPos.RemoveAt(number);
             }*/
+            
         }
+
+
 
         //-------------------------CROPPING--------------------------//
         private async Task CropImagesAsync(SoftwareBitmap softwareBitmap)
@@ -170,7 +195,10 @@ namespace SlidingPuzzle
                     SoftwareBitmapSource source = new SoftwareBitmapSource();
                     await source.SetBitmapAsync(croppedBitmap);
 
-                    AllGridPanels[counter].Source = source;
+                    var brush = new ImageBrush();
+                    brush.ImageSource = source;
+
+                    AllGridPanels[counter].Background = brush;                            
                 }
             }
 
@@ -207,10 +235,32 @@ namespace SlidingPuzzle
                 blankSpace.SetValue(Grid.RowProperty, imageLocation.Item1);
                 blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
             }
-            else
+
+            CheckWin();
+        }
+
+        private bool CheckWin()
+        { 
+            List<Tuple<int, int>> currentPosition = new List<Tuple<int, int>>();
+
+            foreach (Button cropImg in AllGridPanels)
             {
-                // Dont move
+                currentPosition.Add(new Tuple<int, int>
+                (
+                    (int)cropImg.GetValue(Grid.RowProperty),
+                    (int)cropImg.GetValue(Grid.ColumnProperty)
+                ));
             }
+
+            for(int counter = 0; counter < currentPosition.Count; counter++)
+            {
+                if(!currentPosition[counter].Equals(winPosition[counter]))
+                {
+                    return false;
+                }
+            }
+
+            return true;          
         }
 
         private bool BlankIsNeighbor(Tuple<int, int> imageLocation, Tuple<int, int> blankLocation)
