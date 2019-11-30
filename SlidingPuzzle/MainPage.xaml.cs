@@ -264,11 +264,10 @@ namespace SlidingPuzzle
                 blankSpace.SetValue(Grid.RowProperty, imageLocation.Item1);
                 blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
 
-                ClickCount++;
             }
 
             currentPositions = CheckWin();
-            if(currentPositions.Count == 0)             // Win scenario -> 0 memebers
+            if (currentPositions.Count == 0)             // Win scenario -> 0 memebers
             {
                 ShowPopupOffsetClicked(sender, e);
                 localSettings.Values["LastImagePath"] = null;
@@ -278,6 +277,7 @@ namespace SlidingPuzzle
                 SavePositionState(currentPositions);    // Lose scenario -> Save state
             }
 
+        }
         private List<Tuple<int, int>> CheckWin()
         {
             bool isWin = true;
@@ -296,7 +296,6 @@ namespace SlidingPuzzle
             {
                 currentPositions.Clear();
             }
-
             return currentPositions;
         }
 
@@ -391,8 +390,10 @@ namespace SlidingPuzzle
 
             SoftwareBitmapSource bitmapSource = new SoftwareBitmapSource();
             await bitmapSource.SetBitmapAsync(softwareBitmapBGR8);
+            OriginalImage.Source = bitmapSource;
 
             await CropImagesAsync(softwareBitmap);
+            RandomizeTiles();
         }
        
         private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -407,8 +408,8 @@ namespace SlidingPuzzle
                 case "Camera":
                     Use_Photo(sender, e);
                     break;
-                case "Shuffle":
-
+                case "ShufflePics":
+                    RandomizeTiles();
                     break;
                 default:
                     break;

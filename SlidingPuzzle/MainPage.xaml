@@ -87,7 +87,6 @@
             </Grid> 
         </StackPanel>
         <Image Name="OriginalImage" Height="231" Margin="600,0,75,0" Width="259" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBlock x:Name="counter" x:DefaultBindMode="OneWay" Text="{Binding _ClickCount }" Foreground="Black" FontSize="24" Width="200" Height="250" HorizontalAlignment="right"/>
 
         <Popup VerticalOffset="150" HorizontalOffset="150" x:Name="StandardPopup" IsLightDismissEnabled="True">
             
