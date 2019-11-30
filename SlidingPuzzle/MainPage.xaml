@@ -23,7 +23,7 @@
             <StackPanel>
                 <Image Height="80" VerticalAlignment="Bottom"/>
                 <ListView x:Name="ListViewMenu" Foreground="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
-                    <ListViewItem x:Name="OpenFile" Height="60">
+                    <ListViewItem x:Name="OpenFile" Height="60" >
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="NewFolder" />
                         </StackPanel>
@@ -33,10 +33,13 @@
                             <SymbolIcon Symbol="Camera"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ShufflePics" Height="60">
+                    <ListViewItem x:Name="ShufflePics" Height="60" >
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Refresh"/>
                         </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="None" Height="60" Visibility="Collapsed">
+                        
                     </ListViewItem>
                 </ListView>
 

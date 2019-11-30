@@ -395,7 +395,7 @@ namespace SlidingPuzzle
             await CropImagesAsync(softwareBitmap);
             RandomizeTiles();
         }
-       
+
         private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GridMain.Children.Clear();
@@ -411,10 +411,19 @@ namespace SlidingPuzzle
                 case "ShufflePics":
                     RandomizeTiles();
                     break;
+                case "None":
+                    break;
                 default:
                     break;
+
             }
-        }
+            ListViewMenu.SelectedIndex = 3;
+
+        
+    }
+
+
+
 
         private void ClosePopupClicked(object sender, RoutedEventArgs e)
         {
