@@ -108,6 +108,23 @@
                
             </Border>
         </Popup>
+        <Popup VerticalOffset="150" HorizontalOffset="150" x:Name="ErrorPopup" IsLightDismissEnabled="True">
+
+            <Border BorderBrush="Green" 
+                Background="Black"
+                Opacity=".8"
+                BorderThickness="2" Width="500" Height="300">
+
+                <StackPanel>
+                    <Image Height="200" Width="200" Source="{x:Bind errorImageSource, Mode=OneWay}" VerticalAlignment="Center"/>
+
+                    <TextBlock Foreground="White" FontSize="24"  HorizontalAlignment="Center"  Text="That image is too small!!">
+
+                    </TextBlock>
+                </StackPanel>
+
+            </Border>
+        </Popup>
 
     </Grid>
 </Page>

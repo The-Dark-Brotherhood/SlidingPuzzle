@@ -30,6 +30,8 @@ namespace SlidingPuzzle
         ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
     
     private string ImageSource { get; set; }
+    private string errorImageSource { get; set; }
+
 
         List<Button> AllGridPanels = null;
         List<Tuple<int, int>> statePosition = new List<Tuple<int, int>>();
@@ -74,6 +76,7 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg14);
             AllGridPanels.Add(blankButton);
             ImageSource = @"https://media.giphy.com/media/Is1O1TWV0LEJi/giphy.gif";
+            errorImageSource = @"https://i.imgur.com/Yl0Ba9y.gif";
         }
 
 
@@ -100,12 +103,21 @@ namespace SlidingPuzzle
             // Send to source to display
             SoftwareBitmapSource originalSource = new SoftwareBitmapSource();
             await originalSource.SetBitmapAsync(softwareBitmap);
+           
+            // Crop and Randomize
+            try
+            {
+                await CropImagesAsync(softwareBitmap);
+            }
+            catch
+            {
+                ShowPopupError(sender, e);
+                return;
+            }
+
             OriginalImage.Source = originalSource;
 
-            // Crop and Randomize
-            await CropImagesAsync(softwareBitmap);
-
-            if(inputFile.Path != localSettings.Values["LastImagePath"] as string)       // If the image being loaded is a current game -> Do NOT RANDOMIZE 
+            if (inputFile.Path != localSettings.Values["LastImagePath"] as string)       // If the image being loaded is a current game -> Do NOT RANDOMIZE 
             {
                 // Save state image into local settings -> Used for recovering state
                 localSettings.Values["LastImagePath"] = (string)inputFile.Path;
@@ -420,7 +432,7 @@ namespace SlidingPuzzle
             ListViewMenu.SelectedIndex = 3;
 
         
-    }
+        }
 
 
 
@@ -431,6 +443,14 @@ namespace SlidingPuzzle
             if (StandardPopup.IsOpen) { StandardPopup.IsOpen = false; }
         }
 
+        private void ShowPopupError(object sender, RoutedEventArgs e)
+        {
+            // open the Popup if it isn't open already 
+            if (!ErrorPopup.IsOpen) { ErrorPopup.IsOpen = true; }
+
+
+        }
+        
         // Handles the Click event on the Button on the page and opens the Popup. 
         private void ShowPopupOffsetClicked(object sender, RoutedEventArgs e)
         {
