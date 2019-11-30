@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Media.Capture;
 using Windows.Foundation;
+using System.ComponentModel;
 
 
 
@@ -24,8 +25,43 @@ namespace SlidingPuzzle
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    /// 
     public sealed partial class MainPage : Page
     {
+
+        public int ClickCount
+        {
+            get;
+            set;
+        }
+        string _clickCountString;
+        public string clickCountString
+        {
+            get
+            {
+                return _clickCountString;
+            }
+
+            set
+            {
+                _clickCountString = value;
+                NotifyPropertyChanged("clickCountString");
+
+            }
+        }
+
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+    
+    private string ImageSource { get; set; }
+
+
         List<Button> AllGridPanels = null;
         List<Tuple<int, int>> winPosition = new List<Tuple<int, int>>()      
         {
@@ -49,6 +85,8 @@ namespace SlidingPuzzle
 
         public MainPage()
         {
+            ClickCount = 0;
+
             this.InitializeComponent();
             AllGridPanels = new List<Button>();
             AllGridPanels.Add(cropImg0);
@@ -67,6 +105,10 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg13);
             AllGridPanels.Add(cropImg14);
             AllGridPanels.Add(blankButton);
+            DataContext = this;
+            ImageSource = @"https://media.giphy.com/media/Is1O1TWV0LEJi/giphy.gif";
+
+
         }
 
 
@@ -191,7 +233,6 @@ namespace SlidingPuzzle
                         croppedBitmap = SoftwareBitmap.Convert(croppedBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
                     }
 
-
                     SoftwareBitmapSource source = new SoftwareBitmapSource();
                     await source.SetBitmapAsync(croppedBitmap);
 
@@ -203,7 +244,7 @@ namespace SlidingPuzzle
             }
 
             gameContainer.Visibility = Visibility.Visible;
-
+            ClickCount = 0;
 
         }
 
@@ -234,9 +275,14 @@ namespace SlidingPuzzle
 
                 blankSpace.SetValue(Grid.RowProperty, imageLocation.Item1);
                 blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
+
+                ClickCount++;
             }
 
-            CheckWin();
+            if(CheckWin())
+            {
+                ShowPopupOffsetClicked(sender, e);
+            }
         }
 
         private bool CheckWin()
@@ -259,7 +305,6 @@ namespace SlidingPuzzle
                     return false;
                 }
             }
-
             return true;          
         }
 
@@ -372,6 +417,20 @@ namespace SlidingPuzzle
             }
         }
 
+        private void ClosePopupClicked(object sender, RoutedEventArgs e)
+        {
+            // if the Popup is open, then close it 
+            if (StandardPopup.IsOpen) { StandardPopup.IsOpen = false; }
+        }
+
+        // Handles the Click event on the Button on the page and opens the Popup. 
+        private void ShowPopupOffsetClicked(object sender, RoutedEventArgs e)
+        {
+            // open the Popup if it isn't open already 
+            if (!StandardPopup.IsOpen) { StandardPopup.IsOpen = true; }
+
+
+        }
     }
 
 }
