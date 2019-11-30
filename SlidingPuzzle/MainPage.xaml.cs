@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Media.Capture;
 using Windows.Foundation;
+using System.IO;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -24,8 +25,10 @@ namespace SlidingPuzzle
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         List<Button> AllGridPanels = null;
-        List<Tuple<int, int>> winPosition = new List<Tuple<int, int>>()      
+        List<Tuple<int, int>> statePosition = new List<Tuple<int, int>>();
+        List<Tuple<int, int>> winPosition = new List<Tuple<int, int>>()
         {
             Tuple.Create(0, 0),
             Tuple.Create(0, 1),
@@ -48,7 +51,6 @@ namespace SlidingPuzzle
         public MainPage()
         {
             this.InitializeComponent();
-
             AllGridPanels = new List<Button>();
             AllGridPanels.Add(cropImg0);
             AllGridPanels.Add(cropImg1);
@@ -66,12 +68,12 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg13);
             AllGridPanels.Add(cropImg14);
             AllGridPanels.Add(blankButton);
+
         }
 
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-                
             // Reference: https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/imaging
             // Select image
             FileOpenPicker fileOpenPicker = new FileOpenPicker();
@@ -79,13 +81,40 @@ namespace SlidingPuzzle
             fileOpenPicker.FileTypeFilter.Add(".png");
             fileOpenPicker.ViewMode = PickerViewMode.Thumbnail;
 
-            var inputFile = await fileOpenPicker.PickSingleFileAsync();
+            StorageFile inputFile = await fileOpenPicker.PickSingleFileAsync();
+
             if (inputFile == null)
             {
                 // The user cancelled the picking operation
                 return;
-            }   
+            }
+ 
+            SoftwareBitmap softwareBitmap = await LoadBitmapAsync(inputFile);
+            softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
 
+            // Send to source to display
+            SoftwareBitmapSource originalSource = new SoftwareBitmapSource();
+            await originalSource.SetBitmapAsync(softwareBitmap);
+            OriginalImage.Source = originalSource;
+
+            // Crop and Randomize
+            await CropImagesAsync(softwareBitmap);
+
+            if(inputFile.Path != localSettings.Values["LastImagePath"] as string)       // If the image being loaded is a current game -> Do NOT RANDOMIZE 
+            {
+                // Save state image into local settings -> Used for recovering state
+                localSettings.Values["LastImagePath"] = (string)inputFile.Path;
+                RandomizeTiles();
+                SavePositionState(GetCurrentPosition());
+            }
+            else
+            {
+                LoadPrevious();
+            }
+        }
+
+        private async Task<SoftwareBitmap> LoadBitmapAsync(StorageFile inputFile)
+        {
             SoftwareBitmap softwareBitmap;
             using (IRandomAccessStream stream = await inputFile.OpenAsync(FileAccessMode.Read))
             {
@@ -96,16 +125,11 @@ namespace SlidingPuzzle
                 softwareBitmap = await decoder.GetSoftwareBitmapAsync();
             }
 
+            return softwareBitmap;
+        }
 
-            softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-
-            SoftwareBitmapSource originalSource = new SoftwareBitmapSource();
-            await originalSource.SetBitmapAsync(softwareBitmap);
-
-            OriginalImage.Source = originalSource;
-            await CropImagesAsync(softwareBitmap);
-
-            /*
+        private void RandomizeTiles()
+        {
             List<Tuple<int, int>> randomPos = new List<Tuple<int, int>>
             {
                new Tuple<int, int>(0,0),
@@ -127,18 +151,20 @@ namespace SlidingPuzzle
 
             Random rng = new Random();
 
-            for (int counter = 0; counter < AllGridPanels.Count - 1 ; counter++)
+            for (int counter = 0; counter < AllGridPanels.Count - 1; counter++)
             {
                 int number = rng.Next(randomPos.Count);
-                AllGridPanels[counter].SetValue(Grid.ColumnProperty, (int)randomPos[number].Item1);
-                AllGridPanels[counter].SetValue(Grid.RowProperty, (int)randomPos[number].Item2);
+
+                AllGridPanels[counter].SetValue(Grid.RowProperty, (int)randomPos[number].Item1);
+                AllGridPanels[counter].SetValue(Grid.ColumnProperty, (int)randomPos[number].Item2);
 
                 randomPos.RemoveAt(number);
-            }*/
-            
+            }
+
+            // Reset blank square
+            AllGridPanels[AllGridPanels.Count - 1].SetValue(Grid.RowProperty, 3);
+            AllGridPanels[AllGridPanels.Count - 1].SetValue(Grid.ColumnProperty, 3);
         }
-
-
 
         //-------------------------CROPPING--------------------------//
         private async Task CropImagesAsync(SoftwareBitmap softwareBitmap)
@@ -197,16 +223,18 @@ namespace SlidingPuzzle
                     var brush = new ImageBrush();
                     brush.ImageSource = source;
 
-                    AllGridPanels[counter].Background = brush;                            
+                    AllGridPanels[counter].Background = brush;
                 }
             }
 
         }
 
+        // Title movement button handler
         private void notBlank_Click(object sender, RoutedEventArgs e)
         {
             Button image = (Button)sender;
             Button blankSpace = this.blankButton;
+            List<Tuple<int, int>> currentPositions = new List<Tuple<int, int>>();
 
             Tuple<int, int> imageLocation = new Tuple<int, int>
             (
@@ -219,7 +247,6 @@ namespace SlidingPuzzle
                 (int)blankSpace.GetValue(Grid.RowProperty),
                 (int)blankSpace.GetValue(Grid.ColumnProperty)
             );
-    
 
             // Neighbors positions 
             if (BlankIsNeighbor(imageLocation, blankLocation))
@@ -232,33 +259,54 @@ namespace SlidingPuzzle
                 blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
             }
 
-            CheckWin();
+            currentPositions = CheckWin();
+            if(currentPositions.Count == 0)             // Win scenario -> 0 memebers
+            {
+                localSettings.Values["LastImagePath"] = null;
+            }
+            else
+            {
+                SavePositionState(currentPositions);    // Lose scenario -> Save state
+            }
         }
 
-        private bool CheckWin()
-        { 
-            List<Tuple<int, int>> currentPosition = new List<Tuple<int, int>>();
+        private List<Tuple<int, int>> CheckWin()
+        {
+            bool isWin = true;
+            List<Tuple<int, int>> currentPositions = GetCurrentPosition();
 
+            for (int counter = 0; counter < currentPositions.Count; counter++)
+            {
+                if (!currentPositions[counter].Equals(winPosition[counter]))
+                {
+                    isWin = false;
+                    break;
+                }
+            }
+
+            if(isWin)           // Return a list with 0 members
+            {
+                currentPositions.Clear();
+            }
+
+            return currentPositions;
+        }
+
+        private List<Tuple<int, int>> GetCurrentPosition()
+        {
+            List <Tuple<int, int>> currentPositions = new List<Tuple<int, int>>();
             foreach (Button cropImg in AllGridPanels)
             {
-                currentPosition.Add(new Tuple<int, int>
+                currentPositions.Add(new Tuple<int, int>
                 (
                     (int)cropImg.GetValue(Grid.RowProperty),
                     (int)cropImg.GetValue(Grid.ColumnProperty)
                 ));
             }
 
-            for(int counter = 0; counter < currentPosition.Count; counter++)
-            {
-                if(!currentPosition[counter].Equals(winPosition[counter]))
-                {
-                    return false;
-                }
-            }
+            return currentPositions;
 
-            return true;          
         }
-
         private bool BlankIsNeighbor(Tuple<int, int> imageLocation, Tuple<int, int> blankLocation)
         {
             bool isNeighbor = false;
@@ -273,24 +321,46 @@ namespace SlidingPuzzle
 
             return isNeighbor;
         }
-        private static Random rng = new Random();
 
-        //http://www.vcskicks.com/randomize_array.php
-        private List<E> ShuffleList<E>(List<E> inputList)
+        private void SavePositionState(List<Tuple<int, int>> currentPositions)
         {
-            List<E> randomList = new List<E>();
-
-            Random r = new Random();
-            int randomIndex = 0;
-            while (inputList.Count > 0)
+            for (int counter = 0; counter < currentPositions.Count; counter++)
             {
-                randomIndex = r.Next(0, inputList.Count); //Choose a random object in the list
-                randomList.Add(inputList[randomIndex]); //add it to the new, random list
-                inputList.RemoveAt(randomIndex); //remove to avoid duplicates
+                localSettings.Values[counter.ToString()] = currentPositions[counter].Item1 + "," + currentPositions[counter].Item2;
+            }
+        }
+
+        private void LoadPrevious()
+        {
+            // Check if there was a previous game
+            String lastImage = localSettings.Values["LastImagePath"] as string;
+            if (lastImage == null)
+            {
+                return;
             }
 
-            return randomList; //return the new random list
+            // Load the position state data
+            for (int counter = 0; counter < AllGridPanels.Count; counter++)
+            {
+                string conversion = (string)localSettings.Values[counter.ToString()];
+                if (conversion == null)
+                {
+                    break;
+                }
+                string[] values = conversion.Split(',');
+                Tuple<int, int> newTuple = new Tuple<int, int>(Int32.Parse(values[0]), Int32.Parse(values[1]));
+                statePosition.Add(newTuple);
+            }
+
+            // Load the postion state
+            for (int counter = 0; counter < AllGridPanels.Count; counter++)
+            {
+                AllGridPanels[counter].SetValue(Grid.RowProperty, statePosition[counter].Item1);
+                AllGridPanels[counter].SetValue(Grid.ColumnProperty, statePosition[counter].Item2);
+            }
         }
+
+        // CAMERA CAPABILITY FUNCTION
         private async void Use_Photo(object sender, RoutedEventArgs e)
         {
             CameraCaptureUI captureUI = new CameraCaptureUI();
@@ -317,7 +387,5 @@ namespace SlidingPuzzle
 
             await CropImagesAsync(softwareBitmap);
         }
-
     }
-
 }
