@@ -16,6 +16,7 @@ using Windows.Foundation;
 using System.IO;
 
 
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace SlidingPuzzle
@@ -23,9 +24,13 @@ namespace SlidingPuzzle
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+    /// 
     public sealed partial class MainPage : Page
     {
         ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+    
+    private string ImageSource { get; set; }
+
         List<Button> AllGridPanels = null;
         List<Tuple<int, int>> statePosition = new List<Tuple<int, int>>();
         List<Tuple<int, int>> winPosition = new List<Tuple<int, int>>()
@@ -68,7 +73,7 @@ namespace SlidingPuzzle
             AllGridPanels.Add(cropImg13);
             AllGridPanels.Add(cropImg14);
             AllGridPanels.Add(blankButton);
-
+            ImageSource = @"https://media.giphy.com/media/Is1O1TWV0LEJi/giphy.gif";
         }
 
 
@@ -216,7 +221,6 @@ namespace SlidingPuzzle
                         croppedBitmap = SoftwareBitmap.Convert(croppedBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
                     }
 
-
                     SoftwareBitmapSource source = new SoftwareBitmapSource();
                     await source.SetBitmapAsync(croppedBitmap);
 
@@ -226,6 +230,8 @@ namespace SlidingPuzzle
                     AllGridPanels[counter].Background = brush;
                 }
             }
+
+            gameContainer.Visibility = Visibility.Visible;
 
         }
 
@@ -257,18 +263,20 @@ namespace SlidingPuzzle
 
                 blankSpace.SetValue(Grid.RowProperty, imageLocation.Item1);
                 blankSpace.SetValue(Grid.ColumnProperty, imageLocation.Item2);
+
+                ClickCount++;
             }
 
             currentPositions = CheckWin();
             if(currentPositions.Count == 0)             // Win scenario -> 0 memebers
             {
+                ShowPopupOffsetClicked(sender, e);
                 localSettings.Values["LastImagePath"] = null;
             }
             else
             {
                 SavePositionState(currentPositions);    // Lose scenario -> Save state
             }
-        }
 
         private List<Tuple<int, int>> CheckWin()
         {
@@ -305,7 +313,6 @@ namespace SlidingPuzzle
             }
 
             return currentPositions;
-
         }
         private bool BlankIsNeighbor(Tuple<int, int> imageLocation, Tuple<int, int> blankLocation)
         {
@@ -386,6 +393,41 @@ namespace SlidingPuzzle
             await bitmapSource.SetBitmapAsync(softwareBitmapBGR8);
 
             await CropImagesAsync(softwareBitmap);
+        }
+       
+        private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GridMain.Children.Clear();
+
+            switch (((ListViewItem)((ListView)sender).SelectedItem).Name)
+            {
+                case "OpenFile":
+                    Button_Click(sender, e);
+                    break;
+                case "Camera":
+                    Use_Photo(sender, e);
+                    break;
+                case "Shuffle":
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void ClosePopupClicked(object sender, RoutedEventArgs e)
+        {
+            // if the Popup is open, then close it 
+            if (StandardPopup.IsOpen) { StandardPopup.IsOpen = false; }
+        }
+
+        // Handles the Click event on the Button on the page and opens the Popup. 
+        private void ShowPopupOffsetClicked(object sender, RoutedEventArgs e)
+        {
+            // open the Popup if it isn't open already 
+            if (!StandardPopup.IsOpen) { StandardPopup.IsOpen = true; }
+
+
         }
     }
 }
